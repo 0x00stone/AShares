@@ -10,18 +10,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 /**
  * @author Revers.
- * @date 2022/06/23 22:25
+ * @date 2022/07/03 22:09
  **/
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ASharesApplication.class)
-public class TestCreateTable {
+public class TestCreateCompanyTable {
 
     @Autowired
     private InitTableDao createTableMapper;
 
     @Test
     public void testCreateTable(){
-        createTableMapper.createTable();
+        createTableMapper.createCompany();
         System.out.println("success");
     }
 }
