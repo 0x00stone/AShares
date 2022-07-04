@@ -8,6 +8,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -21,10 +22,9 @@ import java.util.Map;
 @Getter
 @Setter
 @Table(name = "company")
-public class Company {
+public class Company implements Serializable {
     @Id
-    @GeneratedValue
-    private Integer id;//股票id SH600000 -- 02600000
+    private String org_id;//股票id SH600000 -- 02600000
     private String org_name_cn; //公司名称 上海浦东发展银行股份有限公司
     private String org_short_name_cn;//短名称  浦发银行
     private String org_name_en; //英文名称 Shanghai Pudong Development Bank Co.,Ltd.
@@ -40,7 +40,7 @@ public class Company {
     private Long reg_asset;//注册资本(CNY) 29352171861
     private Integer staff_num;//员工人数 63361
     private String telephone;//    联系电话	86-21-63611226;86-21-61618888
-    private Integer postcode;//    邮政编码	200002
+    private String postcode;//    邮政编码	200002
     private String fax;//    传真	86-21-63230807
     private String email;//    电子邮箱	xw@spdb.com.cnwur2@spdb.com.cnbdo@spdb.com.cn
     private String org_website;//    公司网址	www.spdb.com.cn

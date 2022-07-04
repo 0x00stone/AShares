@@ -1,5 +1,6 @@
 package com.revers.ashares.util.net;
 
+import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.config.RequestConfig;
@@ -25,6 +26,8 @@ import java.util.List;
  * @date 2022/06/25 14:32
  * 爬虫类
  **/
+
+@Slf4j
 public class HttpUtils {
     private PoolingHttpClientConnectionManager cm;
     String userAgent = "";
@@ -59,12 +62,8 @@ public class HttpUtils {
 
             if(response.getStatusLine().getStatusCode() == 200){
                 if(response.getEntity() != null){
-                    String content = EntityUtils.toString(response.getEntity(),"utf-8");
-                    System.out.println("content::::"+content);
-                    StringEntity entity = new StringEntity(content,"utf-8");
-                    System.out.println("Entity :::::"+entity.getContent().toString());
-                    String resonseString = new String(response.getEntity().getCo)
-
+                    String content = EntityUtils.toString(response.getEntity(),"UTF-8");
+                    log.info(content);
                     return content;
                 }
             }else {
@@ -101,7 +100,7 @@ public class HttpUtils {
                 for(Header header : response.getHeaders("Set-Cookie")){
                     if(header.getValue().matches(".*xq_a_token.*")){
                         cookie = header.getValue().substring(11,53);
-                        System.out.println("获取token" + cookie);
+                        log.info("获取token" + cookie);
                     }
                 }
             }
