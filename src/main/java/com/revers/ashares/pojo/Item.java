@@ -5,6 +5,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
+import java.util.Date;
 
 
 /**
@@ -20,6 +21,9 @@ import java.math.BigDecimal;
 public class Item {
     @Id
     private String id; //记录id 股票id+时间戳乘以1000
+    private String shareid;
+    private Integer number;
+    private String date;
     private Integer volume; //成交量
     private BigDecimal open; //开盘价
     private BigDecimal high; //最高价
@@ -44,11 +48,13 @@ public class Item {
     private BigDecimal hold_ratio_hk;
     private BigDecimal net_volume_hk;
 
-    public Item(String sharesId, Long timestamp, Integer volume, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, BigDecimal chg,
+    public Item(String sharesId, Long timestamp, String date,Integer volume, BigDecimal open, BigDecimal high, BigDecimal low, BigDecimal close, BigDecimal chg,
                 BigDecimal percent, BigDecimal turnoverrate, Double amount, Integer volume_post, BigDecimal amount_post,
                 BigDecimal pe, BigDecimal pb, BigDecimal ps, BigDecimal pcf, Double market_capital, Double balance, Integer hold_volume_cn,
                 BigDecimal hold_ratio_cn, Integer net_volume_cn, BigDecimal hold_volume_hk, BigDecimal hold_ratio_hk, BigDecimal net_volume_hk) {
         this.id = sharesId + timestamp;
+        this.shareid = sharesId;
+        this.date = date;
         this.volume = volume;
         this.open = open;
         this.high = high;

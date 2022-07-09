@@ -18,7 +18,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -54,12 +57,14 @@ public class TestItemTask {
 
         //String s = httpUtils.doGetHtml("https://xueqiu.com/");
 
+        String shareId = "SH688363";
+        String begin = "1585152000000";
         URIBuilder uriBuilder = new URIBuilder("https://stock.xueqiu.com/v5/stock/chart/kline.json");
-        uriBuilder.setParameter("symbol","SH688363")
-                .setParameter("begin","1585152000000")
+        uriBuilder.setParameter("symbol",shareId)
+                .setParameter("begin",begin)
                 .setParameter("period","day")
                 .setParameter("type","before")
-                .setParameter("count","-212")
+                .setParameter("count","-200")
                 .setParameter("indicator","kline,pe,pb,ps,pcf,market_capital,agt,ggt,balance");
 
 
@@ -67,17 +72,31 @@ public class TestItemTask {
         String content = httpUtils.doGetHtml(uriBuilder);
         String content1 = JSON.parseObject(content).get("data").toString();
         String content2 = JSON.parseObject(content1).get("item").toString();
-        System.out.println(content);
-        System.out.println(content1);
-        System.out.println(content2);
         System.out.println(JSON.parseArray(content2).size());
         //
         Object[][] objects = JSON.parseObject(content2,Object[][].class);
         for(Object[] obj2 : objects){
             if(obj2.length != 24){
-         //       log.info(obj2[0] + );
+                log.info(obj2[0] + "长度不足24字段");
             }
+
             Long timestamp = (Long) obj2[0];
+            LocalDateTime localDateTime = new Timestamp(timestamp).toLocalDateTime();
+            String date = Integer.toString(localDateTime.getYear());
+            if(localDateTime.getMonthValue() < 10){
+                date = date + "0" + localDateTime.getMonthValue();
+            }else {
+                date += localDateTime.getMonthValue();
+            }
+            if(localDateTime.getDayOfMonth() < 10){
+                date = date + "0" + localDateTime.getMonthValue();
+            }else {
+                date += localDateTime.getDayOfMonth();
+            }
+
+
+
+
             Integer volume = (Integer) obj2[1];
             BigDecimal open =(BigDecimal) obj2[2];
             BigDecimal high = (BigDecimal) obj2[3];
@@ -101,15 +120,19 @@ public class TestItemTask {
             BigDecimal hold_volume_hk =  (BigDecimal) obj2[21];
             BigDecimal hold_ratio_hk = (BigDecimal) obj2[22];
             BigDecimal net_volume_hk =  (BigDecimal) obj2[23];
-            Item item = new Item("SH688363",timestamp, volume, open, high, low,close, chg, percent, turnoverrate, amount, volume_post, amount_post, pe, pb, ps, pcf, market_capital, balance, hold_volume_cn, hold_ratio_cn, net_volume_cn, hold_volume_hk, hold_ratio_hk, net_volume_hk);
+            Item item = new Item(shareId,timestamp, date,volume, open, high, low,close, chg, percent, turnoverrate, amount, volume_post, amount_post, pe, pb, ps, pcf, market_capital, balance, hold_volume_cn, hold_ratio_cn, net_volume_cn, hold_volume_hk, hold_ratio_hk, net_volume_hk);
 
-            System.out.println(objects);
             itemService.save(item);
     }
-
-
-
-
         System.out.println("success");
+    }
+
+    @Test
+    public void timestampToDate(){
+        String timestamp = "1572969600000";
+        LocalDateTime localDateTime = new Timestamp(Long.valueOf(timestamp)).toLocalDateTime();
+
+        System.out.println(localDateTime.getYear()+","+localDateTime.getMonthValue()+","+localDateTime.getDayOfMonth());
+
     }
 }

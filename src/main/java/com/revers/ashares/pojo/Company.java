@@ -24,6 +24,7 @@ import java.util.Map;
 @Table(name = "company")
 public class Company implements Serializable {
     @Id
+    private String id;
     private String org_id;//股票id SH600000 -- 02600000
     private String org_name_cn; //公司名称 上海浦东发展银行股份有限公司
     private String org_short_name_cn;//短名称  浦发银行

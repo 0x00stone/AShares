@@ -29,19 +29,20 @@ public class TestCompanyTask {
 
     HttpUtils httpUtils;
 
-    public void TestCompanyTask(int id) throws URISyntaxException {
+    public void TestCompanyTask(int intId) throws URISyntaxException {
         String content2 = "";
         String content1 = "";
+        String id = "SH" + intId;
         if(httpUtils == null){
             httpUtils = new HttpUtils();
         }
 
         URIBuilder uriBuilder = new URIBuilder("https://stock.xueqiu.com/v5/stock/f10/cn/company.json");
-        uriBuilder.setParameter("symbol","SH" + id);
+        uriBuilder.setParameter("symbol",id);
 
         String content = httpUtils.doGetHtml(uriBuilder);
         if("400".equals(content)){
-            TestCompanyTask(id);
+            TestCompanyTask(intId);
             return;
         }else if("404".equals(content)){
             log.warn(id + "404!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
@@ -62,13 +63,30 @@ public class TestCompanyTask {
 
         Company company = JSON.parseObject(content2,Company.class);
         if(!"null".equals(company.getOrg_id()) && company.getOrg_id() != null){
+            company.setId(id);
             companyService.save(company);
         }
     }
 
     @Test
     public void spiderCompany(){
-        for(int i = 600000 ; i < 700000 ; i++){
+        //sh600000-606000  688000-689000 900900-900960
+        //SZ000001-003900 200010-202000 300000-301400
+        for(int i = 600000 ; i < 606000 ; i++){
+            try {
+                TestCompanyTask(i);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        for(int i = 688000 ; i < 689000 ; i++){
+            try {
+                TestCompanyTask(i);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        for(int i = 900900 ; i < 900960 ; i++){
             try {
                 TestCompanyTask(i);
             }catch (Exception e){
@@ -77,4 +95,6 @@ public class TestCompanyTask {
         }
         log.warn("公司遍历完成！！！！！！！！！！！！！！！！！！！！！！！！！！！");
     }
+
+
 }

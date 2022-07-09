@@ -8,6 +8,9 @@ public interface InitTableDao {
 
     @Update("CREATE TABLE `Shares` (  " +
             "id varchar(25) NOT NULL  PRIMARY KEY,  " +
+            "shareid varchar(10),  " +
+            "number int,  " +
+            "date varchar(10),  " +
             "volume bigint(15),  " +
             "open float," +
             "high float," +
@@ -77,7 +80,8 @@ public interface InitTableDao {
      *     private Float online_success_rate_of_issue;//    网上中签率	1.4155
      *     **/
     @Update("CREATE TABLE `company` (  " +
-            "org_id varchar(20) NOT NULL PRIMARY KEY,  " +
+            "id varchar(20) NOT NULL PRIMARY KEY,  " +
+            "org_id varchar(20)," +
             "org_name_cn varchar(300),  " +
             "org_short_name_cn varchar(300)," +
             "org_name_en varchar(300)," +
